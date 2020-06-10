@@ -135,4 +135,9 @@ export default {
   margin-bottom: 20px;
 }
 
+#back{
+
+  background-color:purple;
+}
+
 </style>
