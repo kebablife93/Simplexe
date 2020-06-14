@@ -6,116 +6,150 @@
     <body>
         <p><?php
 //main
-            $fonction_obj = [-2,2];//fonction objective
+        // Fonction objectif
+            $fonction_obj = [5,7];
             echo 'la foction objective est ';
             foreach ($fonction_obj as $value) {
                 echo $value .' ';
-            } echo '<br/>';
-            $contraintes=[  [1,1,4], //tableau a 2 dim contenant les 
-                        [2,2,4], //contraintes
-                        [3,2,5]
+            } 
+            $tab_obj=array();
+            foreach ($fonction_obj as $value) {
+                array_push($tab_obj, $value);
+            } 
+            echo '<br/>';
+            // print_r($tab_obj); AFFICHAGE DU TABLEAU DE LA FONCTION OBJECTIVE
+            echo '<br/>';
+
+        // Fonction contraintes       
+            $contraintes=[  [3,4,6], //tableau a 2 dim contenant les 
+                        [-2,-7,-5], //contraintes
+                        [6,-8,-2]
                         ];
+
             $reel=array_key_last($fonction_obj) +1;
+
             echo 'les contraintes sont '.'<br/>';
             foreach ($contraintes as $value) {
                 foreach ($value as $valeur) {
                     echo $valeur . ' ' ;                          
                 }echo '<br/>';
             }
+            $tab_cont=array();
+            foreach ($contraintes as $value) {
+                array_push($tab_cont, $value);
+
+            }
+            //print_r($tab_cont); AFFICHAGE DU TABLEAU DE CONTRAINTES
+            
+            echo '<br/>';
+            echo '<br/>';
+
+        //Verifie si il exite une valeur négative dans le égalités 
+
+            foreach (end($tab_cont) as $value) {
+                if ($value <0) 
+                    echo "Il existe une valeur négative et c'est : ". $value;
+                    echo '<br/>';                      
+            }echo '<br/>';
+
+        /////////////////////////////////////////
+            echo '<br/>';
+            echo '<br/>';
+
+            echo "<h1> Autres </h1>";
+
+
             $fonct_obj=fonct_obj_avec_variables($fonction_obj,$contraintes);
             echo 'la nouvelle fonction obectif est ';
             foreach ($fonct_obj as $key => $value) {
                 echo $value .' ';
             }echo '<br/>';
-            $res_cont=[];//resultat pour la resolutiions de ineq
-            $indice = negatif($fonct_obj);
-            $contraintes_avec_variables=contrainte_cre_variable($contraintes); 
-            echo 'voici les contraintes une fois qu\'on a ajouté les variables x4,x5,x6 : ' . '<br/>';
-            foreach ($contraintes_avec_variables as $value) {
-                foreach ($value as $valeur) {
-                    echo $valeur . ' ' ;                          
-                }echo '<br/>';
+          //  $indice = negatif($fonct_obj,0);
+            //echo $indice . '<br/>' ;
+            $dernier=array_key_last($fonct_obj);
+            $contraintes_avec_variables_HZ=contrainte_cre_variable($contraintes);
+            $contraintes_inverse=inverse_contraintes($contraintes_avec_variables_HZ,$reel);
+            for($a=0 ; $a<=$dernier ; $a++){ //changer pour enlever reel
+               if ($fonct_obj[$a]>0 and $a !=$reel) {
+                echo 'la variable entrante est ' . $fonction_obj[$a] . ' d\'indice ' . $a . '<br/>' ;
+                    $res_cont=[];//resultat pour la resolutiions de ineq
+                    foreach ($contraintes_avec_variables_HZ as $value) {
+                        $res_ineq=res_ineq($value,$value[$a],$reel);
+                        array_push($res_cont,$res_ineq);
+                    } 
+                    $indice_cont_min=minimum($res_cont);
+                    echo 'la contrainte active est : ' . $indice_cont_min . '<br/>' ;
+                    $cont_min_inverse=inverse_contrainte_min($contraintes_inverse[$indice_cont_min],$a,$reel);
+                    foreach ($cont_min_inverse as $key => $value) {
+                        echo $value . ' ';
+                    }echo '<br/>';
+                    $cont_active_divise=div_variables($cont_min_inverse,$a);
+                    echo 'la contrainte active divise est egale a' . '<br/>';
+                    foreach ($cont_active_divise as $value) {
+                        echo $value . ' ';
+                    }echo '<br/>' . '<br/>' ;
+                    $contraintes_inverse[$indice_cont_min]=$cont_active_divise;
+                    echo 'les contraintes sont :' . '<br/>';
+                    foreach ($contraintes_inverse as $key => $value) {
+                        foreach ($value as $key => $valeur) {
+                            echo $valeur . ' ';
+                        }echo '<br/>';
+                    }echo '<br/>';
+                    $tab_containtes2=contrainte_maj($contraintes_inverse, $a,$cont_active_divise,$indice_cont_min );
+                    echo 'voici le tableau contenant le resultat du calcul' . '<br/>' ;
+                    foreach ($tab_containtes2 as $key => $value) {
+                        foreach ($value as $key => $valeur) {
+                            echo $valeur . ' ';
+                        }echo '<br/>';
+                    }echo '<br/>';
+                    echo 'voici le tableau des contraintes avec un 0 ' . '<br/>' ;
+                    $contraintes_inverse=contraintes_indice_zero($contraintes_inverse,$a,$indice_cont_min);
+                    foreach ($contraintes_inverse as $key => $value) {
+                        foreach ($value as $key => $valeur) {
+                            echo $valeur . ' ';
+                        }echo '<br/>';
+                    } echo '<br/>' . '<br/>' ;
+                    echo 'voici le tab des contraintes une fois additionné :' . '<br/>';
+                    $contraintes_inverse=somme_contraintes($contraintes_inverse,$tab_containtes2,$indice_cont_min);
+                    foreach ($contraintes_inverse as $key => $value) {
+                        foreach ($value as $valeur) {
+                            echo $valeur . ' ';
+                        }echo '<br/>';
+                    }echo '<br/>' . '<br/>' . '<br/>';
+                    echo 'voici le fonction objectif: ' . '<br/>';
+                    foreach ($fonct_obj as $key => $value) {
+                        echo $value . ' ';
+                    }echo '<br/>' . '<br/>';
+                    echo 'voici le tableau contenant le calcul pour fonct_obj :' . '<br/>';
+                    $fonction_obj2=fonct_obj_maj($fonct_obj,$cont_active_divise,$a);
+                    foreach ($fonction_obj2 as $key => $value) {
+                        echo $value . ' ';
+                    }echo '<br/>' . '<br/>';
+                    echo 'voici la fonction objectif a la fin fin de la boucle ' . $a . ' : ' . '<br/>';
+                    $fonct_obj=fonct_obj_indice_egale_zero($fonct_obj,$a);
+                    $fonct_obj=fonct_obj_somme_tab($fonct_obj,$fonction_obj2);
+                    foreach ($fonct_obj as $key => $value) {
+                        echo $value . ' ' ;
+                    }echo '<br/>' . '<br/>';
+                    echo 'voici les contraintes:' . '<br/>';
+                    $contraintes_inverse[$indice_cont_min]=inverse_contrainte_min($contraintes_inverse[$indice_cont_min],$a,$reel);
+                    foreach ($contraintes_inverse as $value) {
+                        foreach ($value as $key => $valeur) {
+                            echo $valeur . ' ';
+                       }echo '<br/>' . '<br/>';
+                    }
+                }
+                else{
+                    $a++;
+                }
+
             }
-            if ($indice != false){//si tte les var de la fonct_obj ne sont pas
-                echo 'voici l\'indice à laquelle la fonction objective est positif : ';
-                echo $indice;
-                foreach ($contraintes as  $value) {//negatif alors on resout 
-                    $res_negatif=res_ineq($value, $indice);//les ineq pour trouver 
-                    array_push($res_cont,$res_negatif ) ;//la contrainte la +
-                }                               //contraignante
-            }
-             echo 'voici le tableau regroupant les resultats des resolutions des inequations des contraintes afin de trouver la contrainte la plus contraignante :' . '<br/>';
-             foreach ($res_cont as $key => $value) {
-                 echo $value . ' '; 
-             }echo '<br/>';
-            $cont_min= minimum($res_cont);//on trouve la plus contraignante
-            echo 'la contrainte la plus contraignante est la contrainte avec l\'indice numero ' . $cont_min.  '<br/>'. '<br/>' ;
-            $contraintes_inverse=inverse_contraintes($contraintes_avec_variables,$reel);
-            echo 'voici la fonction qu\'on obtien une fois qu\'on a une fois qu\'on a inversé les variables sauf les reel et les variables qu\' on a crée(x4,x5,x6): '. '<br/>';
-            foreach ($contraintes_inverse as $value) {
-                foreach ($value as $valeur) {
-                    echo $valeur .' ';
-                }echo '<br/>';
-            } 
-            echo 'par exemple, la 1ère ligne signifie : x4 = 4 - x1 - x2.'. '<br/>' . 'la 2ème signifie: x5 = 4 - 2x1 - 2x2.' . '<br/>' . 'et la 3ème: x6 = 5 - 3x1 - 2x2';
-            echo '<br/>' . '<br/>';
-            $var=$contraintes_inverse[$cont_min];//on inverse toutes les variables sauf la variable et le reel dans la contrainte la plus contraignante.
-            $res_inverse_cont_min=inverse_contrainte_min($var,$indice,$reel);
-            echo 'voici le tableau que l\'on obtient lorsque on inverse la contrainte la plus contraignante: '. '<br/>' ;
-            foreach ($res_inverse_cont_min as $value) {
-                echo $value . ' ';
-            } echo '<br/>';
-            echo 'cela veut dire que la 2ème ligne qui était: x5 = 4 - 2x1 - 2x2' . '<br/>' . 'est devenue 2x2 = 4 - 2x1 - x5 ';
-            echo'<br/>';
-            $res_div_variable=div_variables($res_inverse_cont_min,$indice);
-            echo 'voici le tableau que l\'on obtient lorsque l\'on divise le tableau qu\'on a reçu juste avant par le coefficient de la variable active(ici, variable active : x2, coefficient variable actif : 2)' . '<br/>';
-            foreach ($res_div_variable as $value) {         ///test
-                echo $value . ' ';
-            }echo '<br/>';
-            echo 'ce qui veut dire :'. '<br/>' . 'x2 = 2 - x1 - 0.5x5' . '<br/>' . '<br/>' ;
-            $contraintes_inverse[$cont_min]=$res_div_variable;
-            echo 'voici ce que l\'on obtient lorsqu\'on met à jour le tableau des contraintes : ' . '</br>';
-            foreach ($contraintes_inverse as $value) {
-               foreach ($value as $valeur) {
-                     echo $valeur.' ';
-                }echo '<br/>';
-            } echo '<br/>'; 
-           echo 'voici un autre tableau que j\'ai créer dans lequel j\' ai les element dans qui sont dans la contrainte la plus contraignante par le coefficient de la variables active, dans toutes les contraintes: ' . '<br/>';
-            $tab_contraintes2=contrainte_maj($contraintes_inverse,$indice,$res_div_variable,$cont_min);
-            echo '<br/>';
-            foreach ($tab_contraintes2 as $value) {  //test
-                foreach ($value as $valeur) {
-                   echo $valeur.' ';
-                }echo '<br/>';
-            }echo '<br/>';
-            echo 'par exemple, dans la contrainte d\' indice 0, c\'est à dire : x4 = 4 - x1 - x2, j\'ai changé x2 par 2 - x1 - 0.5x5 , ce qui donne : ' . '<br/>' . 'x4 = 4 - x1 - (2 - x1 - 0.5x5) ' . 'et le resultat de ce qu\'il y\'a dans la parenthese, je l\'ai mis dans ce tableau que je vien de créer' . '<br/>' . '<br/>' ; 
-            echo 'suite a cela je change le coefficient de la variable active par 0 dans tous les contrainte car j\'utilise ce coefficient dans le tableau que je vient de creer que j\'utiliserai plus tard; sauf pour la contrainte la plus contraignante : ' . '<br/>';
-            $indice_zero=contraintes_indice_zero($contraintes_inverse,$indice,$cont_min);
-            foreach ($indice_zero as $value) { //test
-                foreach ($value as $valeur) {
-                    echo $valeur . ' ';
-                }echo '<br/>' . '<br/>' ;
-            }
-            echo 'voici le tebleau des contraintes que j\'obtien lorsque j\'additionne les coefficient des contraintes que j\'ai dans mon tableau des contraintes, avec les coefficient que j\'ai dans le tableau que je vien de créer : ' ;
             
-            $somme_contraintes=somme_contraintes($indice_zero,$tab_contraintes2,$cont_min);
-            echo '<br/>';
-            foreach ($somme_contraintes as $value) {
-                foreach ($value as $valeur) {
-                    echo $valeur.' ';
-                }echo '<br/>';
-            }
-            echo 'par exeple, la 1ère ligne est obtenu en additionant [-1,0,4,1,0,0] (x4 = 4 -x1) + [1,-1,4,1,0,0] (x4 = 4 +x1 - 1(pas x2 car on a remplacer x2 juste avant)), on obtient alors : ' . '<br/>' . 'x4= 2 +(-1) + 0.5x5' . '<br/>' . 'pour la 2ème ligne on a : ' .'<br/>' . 'x2= -2 -x1 -0.5x5' . '<br/>' . 'et pour la 3ème on a : ' .'<br/>' . 'x6 = 1 - 2 - x1 + x5 ' . '<br/>' . '<br/>' ;
-            echo 'comme nous n\'avons plus de x2 dans les contrainte 0 et 2 on additionne les nombres : ' . '<br/>';
-            $indice_plus_reel=indice_plus_reel($contraintes_inverse,$indice,$reel,$cont_min);
-            foreach ($indice_plus_reel as $value) {
-                foreach ($value as $valeur) {
-                    echo $valeur . ' ';
-                }echo '<br/>';
-            }
-           echo 'ainsi nous avons, pour la contrainte d\'indice 0, nous avons' . '<br/>' .'x4 = 3 - x1' . '<br/>' . ' et pour la contrainte d\'indice 2 nous avons : ' . '<br/>' . 'x6 = 3 - 3x1';
-           
-       
+
+                    
+            
+            echo 'la solution optimale est ' . $fonct_obj[$reel];
+
 
 
 
@@ -123,23 +157,23 @@
 
 //fonctions
         //on voit si toutes les variables de la fonctions obj sont negatifs
-            function negatif ($tab) {
-                foreach ($tab as $key=> $value) {
-
-                    if ($value > 0){//si non on retoune la variable
-                        return $key;
+            function negatif ($tab,$a) {
+                $dernier=array_key_last($tab);
+                for($i=$a ; $i<=$dernier;$i++){
+                    if ($tab[$i]>0) {
+                        return $i;  
                     }
-                }
-                return false; //si oui on retourne false.
+                } 
+                return 'true';//si oui on retourne true.
             }
 
             
             
 
             //on renvoie les resultats des inequations
-            function res_ineq($tab,$indice){
+            function res_ineq($tab,$val,$reel){
                 $dernier=array_key_last($tab);
-                $res= $tab[$dernier]/$tab[$indice];
+                $res= $tab[$reel]/$val;
                 return $res; 
                                
             }
@@ -167,6 +201,7 @@
                 for($i=0; $i<= $dernier_fonct; $i++ ){
                     array_push($res, $fonct_obj[$i]);
                 }
+                array_push($res,0);
                 for($i=0; $i<= $dernier_cont; $i++){
                     array_push($res, 0);
                 }
@@ -201,16 +236,14 @@
            
 
             function inverse_une_contrainte ($tab,$reel){
-                $dernier=array_key_last($tab);
-                $tab_inverse=[];
-                foreach ($tab as $value) {
-                array_push($tab_inverse, -$value);
-            }
-                for($i=$reel; $i<=$dernier; $i++){
-                    $tab_inverse[$i]*=(-1);
+                for($i=0; $i<$reel; $i++){
+                    $tab[$i]*=(-1);
                 }
-                return $tab_inverse;
+                return $tab;
             }
+
+
+          
 
             function inverse_contraintes($tab,$reel){
                 $res_final=[];
@@ -236,7 +269,7 @@
 
             }
 
-            function div_variables($tab,$indice){//on divise par la variable actif
+            function div_variables($tab,$indice){//on divise par la variable entrante
                 $variables_divise=[];
                 $div_var=$tab[$indice];
                 foreach ($tab as $value) {
@@ -290,27 +323,27 @@
             }
 
             */
-            function calcul_contrainte($tab,$indice,$res_div_variable){
+            function calcul_contrainte($tab,$int,$indice){
                 $res=[];
-                $x=$tab[$indice];
-                $dernier=array_key_last($res_div_variable);
-                for($i=0; $i<=$dernier; $i++){
-                    $prod=$res_div_variable[$i] * $x;
-                    array_push($res, $prod);
+                $dernier=array_key_last($tab);
+                for($i=0 ; $i<= $dernier; $i++){
+                    array_push($res,$int * $tab[$i]);
                 }
+                $res[$indice]=0;
                 return $res;
             }
 
             function contrainte_maj($tab, $indice,$res_div_variable,$cont_min ){
                 $res_final=[];
-                foreach ($tab as $key=> $value) {
+                foreach ($tab as $key => $value) {
                     if ($key!=$cont_min) {
-                        $res=calcul_contrainte($value,$indice,$res_div_variable);
-                        array_push($res_final, $res);
+                        $res=calcul_contrainte($res_div_variable,$value[$indice],$indice);
+                        array_push($res_final,$res);
                     }
                     else{
-                        array_push($res_final, $res_div_variable);
+                        array_push($res_final,$value);
                     }
+
                 }
                 return $res_final;
             }
@@ -373,6 +406,34 @@
                 return $res_final;
             }
 
+
+            function fonct_obj_maj($fonct_obj,$res_div_variable,$indice){
+                $x=$fonct_obj[$indice];
+                $res_final=[];
+                $dernier=array_key_last($fonct_obj);
+                for ($i =0 ; $i<=$dernier; $i++){
+                    array_push($res_final,$res_div_variable[$i]*$x);
+                }
+                $res_final[$indice]=0;
+                return $res_final;
+            }
+
+            function fonct_obj_indice_egale_zero($fonct_obj,$indice){
+                $fonct_obj[$indice]=0;
+                return $fonct_obj;
+            }
+       
+            function fonct_obj_somme_tab($tab1,$tab2){
+                $dernier=array_key_last($tab1);
+                $res=[];
+                for ($i=0; $i<=$dernier; $i++){
+                    $x=$tab1[$i];
+                    $y=$tab2[$i];
+                    array_push($res, $x+$y);
+                }
+                return $res;
+            }
+
         
          
  //test         
@@ -381,6 +442,17 @@
             //    echo $res.' ';
             //}echo '<br/>';
         //}
+
+
+
+            /*foreach ($contraintes_avec_variables_HZ as $value) { //test contraintes avec variables hors zone
+                foreach ($value as $valeur) {
+                    echo $valeur . ' ';
+                }echo '<br/>';
+            }*/
+
+
+
 
             /* foreach ($contraintes_inverse as $value) {// test affiche 
             foreach ($value as $res) { //contraintes inverse
@@ -429,6 +501,17 @@
             }*/
 
            
+
+           /*  $tab=[[1,4,3,0,0,1],[-2,4,3,0,1,0],[5,1,4,1,0,0]];
+            $reel=2;
+            $res=inverse_contraintes($tab,$reel); //test inverse_contrainte
+            foreach ($res as $value) {
+                foreach ($value as $valeur) {
+                    echo $valeur . ' ';
+                }echo '<br/>';
+            }*/
+
+
 
            // $tab=[1,6,-7,-2];  //function inverse_contraintes
             //$res=inverse_contraintes($tab);
@@ -538,6 +621,14 @@
                     echo $valeur.' ';
                 }echo '<br/>';
             }*/
+
+             /*   $fonct_obj=[2,4,6,3,5];  //test fonct_obj_indice_egale_zero
+           $indice=2;
+           $res=fonct_obj_indice_egale_zero($fonct_obj,$indice);
+           foreach ($res as $key => $value) {
+               echo $value . ' ';
+           }
+            */
             ?>
         </p> 
     </body>
