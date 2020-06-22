@@ -2,7 +2,7 @@
 
     <div class="container">
     	<div class="jumbotron">
-			<h3 class="gras centre">Biographie de George Bernard Dantzig</h3>
+			<h3 class="mtitre">Biographie de George Bernard Dantzig</h3>
 			<p>
 				George Bernard Dantzig est né le 8 de Novembre de 1914 à Portland, dans l'état de l'Oregon aux États-Unis. Fils de Tobias Dantzig, mathématicien russe et Anja Ourisson, linguiste française spécialisée en langues slaves, qui ont émigré aux États-Unis en 1910, après de s'être marié.
 			</p>

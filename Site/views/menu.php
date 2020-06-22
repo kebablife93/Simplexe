@@ -43,11 +43,13 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbar-dropdown-menu">
               <a class="dropdown-item" href="methodesimplexe.php">Méthode de Simplexe</a>
-              <a class="dropdown-item" href="#">Méthode de Coupes</a>
-              <a class="dropdown-item" href="#">Méthode de Séparation et d'évaluation</a>
+              <a class="dropdown-item" href="Probleme.php">Modélisation de Problèmes</a>
+              <!-- <a class="dropdown-item" href="cours/Coupes.pdf" download="Méthodes des coupes">Méthode de Coupes</a> -->
+              <!-- <a class="dropdown-item" href="cours/Separation_evaluation.pdf"  download="Séparation et évaluation progressive">Méthode de Séparation et d'évaluation</a> -->
+
               <!-- Use this to separate a new link: -->
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Modélisation de Problème</a>
+              <a class="dropdown-item" href="Bibliotheque.php">Bibliothèques</a>
             </div>
           </div>
           <div class="nav-item dropdown">
@@ -82,6 +84,7 @@
     .tabsansbord{ margin:0 auto; border:0; margin-bottom: 20px;}
     .gras{font-weight: bold;}
     .centre{display:block; margin:0 auto; text-align:center;}
+    .tel{display:block; margin:20px auto 20px; text-align:center;}
     .subindice{font-size:11px;}
     .table{
       margin-left:auto;
@@ -106,6 +109,18 @@
     .bio{margin-bottom: 30px; margin-top:30px; margin-left: 30px;}
     .drt{float:right;margin: 20px;}
     .gch{float:left; margin: 20px; }
+    .btn {
+      background-color: DodgerBlue;
+      border: none;
+      color: white;
+      padding: 12px 30px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    /* Darker background on mouse-over */
+    .btn:hover {
+      background-color: RoyalBlue;
+    }
 
   </style>
 
