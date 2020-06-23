@@ -59,30 +59,30 @@
         		</li>
       		</ul>
 			<p>A titre d'exemple on explique comment on fait la modélisation de quelques problèmes typiques : </p>
-			<ul style="list-style:none;">
+			<ul class="pas-de-liste">
 				<li>
-					<a href="#">Problème d'arbres fruitiers</a><br/>
+					<a href="arbres_fruitiers.php">Problème d'arbres fruitiers</a><br/>
 				</li>
 				<li>
-					<a href="#">Problème de transport de marchandise</a><br />
+					<a href="transport_marchandise.php">Problème de transport de marchandise</a><br />
 				</li>
 				<li>
-					<a href="#">Problème d'investissement en bourse</a><br/>
+					<a href="bourse.php">Problème d'investissement en bourse</a><br/>
 				</li>
 				<li>
-					<a href="#">Problème de transport de troupes</a><br/>
+					<a href="transport_troupe.php">Problème de transport de troupes</a><br/>
 				</li>
 				<li>
-					<a href="#">Problème de la diète</a><br/>
+					<a href="diete.php">Problème de la diète</a><br/>
 				</li>
 				<li>
-					<a href="#">Problème de localisation</a><br/>
+					<a href="Localisation.php">Problème de localisation</a><br/>
 				</li>
 				<li>
-					<a href="#">Problème d'attribution de personnel</a><br/>
+					<a href="attribution_personnel.php">Problème d'attribution de personnel</a><br/>
 				</li>
 				<li>
-					<a href="#">Problème du plus court chemin</a><br/>
+					<a href="court_chemin.php">Problème du plus court chemin</a><br/>
 				</li>
 			</ul>
 		</div>
